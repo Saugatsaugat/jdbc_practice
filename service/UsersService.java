@@ -27,7 +27,7 @@ public class UsersService {
             if(con != null){
                 String selectQuery = "SELECT * from users where id=? ;";
                 PreparedStatement pstmt = con.prepareStatement(selectQuery);
-                pstmt.setInt(0, id);
+                pstmt.setInt(1, id);
                 ResultSet rs = pstmt.executeQuery();
                 while(rs.next()){
                     String name = rs.getString("name");
@@ -99,9 +99,9 @@ public class UsersService {
             if(con != null){
                 String insertQuery = "INSERT INTO users (name, email, joined_date) values(?, ?, ?);";
                 PreparedStatement pstmt = con.prepareStatement(insertQuery);
-                pstmt.setString(0, users.getName());
-                pstmt.setString(1, users.getEmail());
-                pstmt.setDate(2, java.sql.Date.valueOf(users.getJoinedDate()));
+                pstmt.setString(1, users.getName());
+                pstmt.setString(2, users.getEmail());
+                pstmt.setDate(3, java.sql.Date.valueOf(users.getJoinedDate()));
                 if(pstmt.executeUpdate()>0){
                     System.out.println("Data inserted successfully");
                 }else{
@@ -127,10 +127,10 @@ public class UsersService {
             if(con != null){
                 String updateQuery = "UPDATE users set name=?, email=?, joined_date=? where id=? ;";
                 PreparedStatement pstmt = con.prepareStatement(updateQuery);
-                pstmt.setString(0, users.getName());
-                pstmt.setString(1, users.getEmail());
-                pstmt.setDate(2, java.sql.Date.valueOf(users.getJoinedDate()));
-                pstmt.setInt(3, users.getId());
+                pstmt.setString(1, users.getName());
+                pstmt.setString(2, users.getEmail());
+                pstmt.setDate(3, java.sql.Date.valueOf(users.getJoinedDate()));
+                pstmt.setInt(4, users.getId());
 
                 if(pstmt.executeUpdate() > 0){
                     System.out.println("Data Updated successfully");
@@ -143,5 +143,42 @@ public class UsersService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /*
+    This method will return User object if the email is of valid user.
+    */
+    public Users findUserByEmail(String userEmail) {
+        Users users = new Users();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(DatabaseCredentials.JDBC_URL,
+                    DatabaseCredentials.DATABASE_USER,
+                    DatabaseCredentials.DATABASE_PASS);
+
+            if(con != null){
+                String selectQuery = "SELECT * from users where email=? ;";
+                PreparedStatement pstmt = con.prepareStatement(selectQuery);
+                System.out.println(userEmail);
+                pstmt.setString(1, userEmail);
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()){
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    String email = rs.getString("email");
+                    LocalDate joinedDate = rs.getDate("joined_date").toLocalDate();
+
+                    users.setId(id);
+                    users.setName(name);
+                    users.setEmail(email);
+                    users.setJoinedDate(joinedDate);
+                }
+            }
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 }
