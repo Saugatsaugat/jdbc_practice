@@ -43,6 +43,7 @@ public class BooksService {
                     books.setQuantity(quantity);
                     books.setAddedDate(addedDate);
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -87,6 +88,7 @@ public class BooksService {
 
                     booksList.add(books);
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -120,6 +122,7 @@ public class BooksService {
                 }else{
                     System.out.println("Data insertion failed");
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -152,6 +155,7 @@ public class BooksService {
                 }else{
                     System.out.println("Data Update failed");
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -195,6 +199,7 @@ public class BooksService {
 
                     booksList.add(books);
                 }
+                pstmt.close();
             }
             con.close();
 

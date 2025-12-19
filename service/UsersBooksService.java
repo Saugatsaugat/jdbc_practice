@@ -7,8 +7,10 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import database.DatabaseCredentials;
+import model.Books;
 import model.UsersBooks;
 
 public class UsersBooksService {
@@ -43,6 +45,7 @@ public class UsersBooksService {
                     usersBooks.setDueDate(dueDate);
                     usersBooks.setReturnDate(returnDate);
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -91,6 +94,7 @@ public class UsersBooksService {
 
                     usersBooksList.add(usersBooks);
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -110,18 +114,55 @@ public class UsersBooksService {
                     DatabaseCredentials.DATABASE_USER,
                     DatabaseCredentials.DATABASE_PASS);
 
+            con.setAutoCommit(false);
+
             if (con != null) {
+                // check if book is available
+                BooksService booksService = new BooksService();
+                Books books = booksService.get(usersBooks.getBookId());
+
+                if (books.getQuantity() < 1) {
+                    System.out.println("Insufficient Quantity. No book in stock.");
+                    return;
+                }
+
+                List<UsersBooks> records = getAll();
+                List<UsersBooks> bookAlreadyTaken = records.stream()
+                        .filter(x -> Objects.equals(x.getBookId(), usersBooks.getBookId())
+                                && x.getReturnDate() == null)
+                        .toList();
+                if (bookAlreadyTaken.size() > 0) {
+                    System.out.println("User has taken this book and have not returned yet.");
+                    return;
+                }
+
+                int oldQuant = books.getQuantity();
+                int newQuant = oldQuant - 1;
+
                 String insertQuery = "INSERT INTO users_books (user_id, book_id, issue_date, due_date) values(?, ?, ?, ?);";
+
                 PreparedStatement pstmt = con.prepareStatement(insertQuery);
                 pstmt.setInt(1, usersBooks.getUserId());
                 pstmt.setInt(2, usersBooks.getBookId());
                 pstmt.setDate(3, java.sql.Date.valueOf(usersBooks.getIssueDate()));
                 pstmt.setDate(4, java.sql.Date.valueOf(usersBooks.getDueDate()));
+
                 if (pstmt.executeUpdate() > 0) {
-                    System.out.println("Data inserted successfully");
+                    String updateQuery = "UPDATE books set quantity=? where id=? ;";
+                    PreparedStatement pstmtUpdate = con.prepareStatement(updateQuery);
+                    pstmtUpdate.setInt(1, newQuant);
+                    pstmtUpdate.setInt(2, usersBooks.getBookId());
+                    if (pstmtUpdate.executeUpdate() > 0) {
+                        con.commit();
+                        System.out.println("Data inserted Successfully");
+                    } else {
+                        System.out.println("Error!!! Contact Admin!!!");
+                    }
+                    pstmtUpdate.close();
                 } else {
                     System.out.println("Data insertion failed");
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -154,6 +195,7 @@ public class UsersBooksService {
                 } else {
                     System.out.println("Data Update failed");
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -202,6 +244,7 @@ public class UsersBooksService {
 
                     usersBooksList.add(usersBooks);
                 }
+                pstmt.close();
             }
             con.close();
 

@@ -39,6 +39,7 @@ public class UsersService {
                     users.setEmail(email);
                     users.setJoinedDate(joinedDate);
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -77,6 +78,7 @@ public class UsersService {
                     users.setJoinedDate(joinedDate);
                     usersList.add(users);
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -107,6 +109,7 @@ public class UsersService {
                 }else{
                     System.out.println("Data insertion failed");
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -137,6 +140,7 @@ public class UsersService {
                 }else{
                     System.out.println("Data Update failed");
                 }
+                pstmt.close();
             }
             con.close();
 
@@ -159,7 +163,6 @@ public class UsersService {
             if(con != null){
                 String selectQuery = "SELECT * from users where email=? ;";
                 PreparedStatement pstmt = con.prepareStatement(selectQuery);
-                System.out.println(userEmail);
                 pstmt.setString(1, userEmail);
                 ResultSet rs = pstmt.executeQuery();
                 while(rs.next()){
@@ -173,6 +176,7 @@ public class UsersService {
                     users.setEmail(email);
                     users.setJoinedDate(joinedDate);
                 }
+                pstmt.close();
             }
             con.close();
 

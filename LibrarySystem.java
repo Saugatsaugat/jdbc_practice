@@ -356,8 +356,8 @@ public class LibrarySystem {
             System.out.println("Enter due date(YYYY-MM-DD): ");
             String dueDate = sc.nextLine();
 
-            System.out.println("Enter return date(YYYY-MM-DD): ");
-            String returnDate = sc.nextLine();
+            // System.out.println("Enter return date(YYYY-MM-DD): ");
+            // String returnDate = sc.nextLine();
 
             UsersBooks record = new UsersBooks();
             Users user = usersService.findUserByEmail(email);
@@ -371,8 +371,8 @@ public class LibrarySystem {
             String dueDateValues[] = dueDate.split("-");
             record.setDueDate(LocalDate.of(Integer.parseInt(dueDateValues[0]), Integer.parseInt(dueDateValues[1]), Integer.parseInt(dueDateValues[2])));
 
-            String returnDateValues[] = returnDate.split("-");
-            record.setReturnDate(LocalDate.of(Integer.parseInt(returnDateValues[0]), Integer.parseInt(returnDateValues[1]), Integer.parseInt(returnDateValues[2])));
+            // String returnDateValues[] = returnDate.split("-");
+            // record.setReturnDate(LocalDate.of(Integer.parseInt(returnDateValues[0]), Integer.parseInt(returnDateValues[1]), Integer.parseInt(returnDateValues[2])));
 
             usersBooksService.create(record);
         } catch (Exception e) {
