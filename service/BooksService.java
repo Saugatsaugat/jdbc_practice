@@ -27,7 +27,7 @@ public class BooksService {
             if(con != null){
                 String selectQuery = "SELECT * from books where id=? ;";
                 PreparedStatement pstmt = con.prepareStatement(selectQuery);
-                pstmt.setInt(0, id);
+                pstmt.setInt(1, id);
                 ResultSet rs = pstmt.executeQuery();
                 while(rs.next()){
                     String title = rs.getString("title");
@@ -107,13 +107,13 @@ public class BooksService {
                     DatabaseCredentials.DATABASE_PASS);
 
             if(con != null){
-                String insertQuery = "INSERT INTO books (title, author, category, quantity, addedDate) values(?, ?, ?, ?, ?);";
+                String insertQuery = "INSERT INTO books (title, author, category, quantity, added_date) values(?, ?, ?, ?, ?);";
                 PreparedStatement pstmt = con.prepareStatement(insertQuery);
-                pstmt.setString(0, books.getTitle());
-                pstmt.setString(1, books.getAuthor());
-                pstmt.setString(2, books.getCategory());
-                pstmt.setInt(3, books.getQuantity());
-                pstmt.setDate(4, java.sql.Date.valueOf(books.getAddedDate()));
+                pstmt.setString(1, books.getTitle());
+                pstmt.setString(2, books.getAuthor());
+                pstmt.setString(3, books.getCategory());
+                pstmt.setInt(4, books.getQuantity());
+                pstmt.setDate(5, java.sql.Date.valueOf(books.getAddedDate()));
 
                 if(pstmt.executeUpdate()>0){
                     System.out.println("Data inserted successfully");
@@ -140,12 +140,12 @@ public class BooksService {
             if(con != null){
                 String updateQuery = "UPDATE books set title=?, author=?, category=?,quantity=?, added_date=? where id=? ;";
                 PreparedStatement pstmt = con.prepareStatement(updateQuery);
-                pstmt.setString(0, books.getTitle());
-                pstmt.setString(1, books.getAuthor());
-                pstmt.setString(2, books.getCategory());
-                pstmt.setInt(3, books.getQuantity());
-                pstmt.setDate(4, java.sql.Date.valueOf(books.getAddedDate()));
-                pstmt.setInt(5, books.getId());
+                pstmt.setString(1, books.getTitle());
+                pstmt.setString(2, books.getAuthor());
+                pstmt.setString(3, books.getCategory());
+                pstmt.setInt(4, books.getQuantity());
+                pstmt.setDate(5, java.sql.Date.valueOf(books.getAddedDate()));
+                pstmt.setInt(6, books.getId());
 
                 if(pstmt.executeUpdate() > 0){
                     System.out.println("Data Updated successfully");
@@ -159,4 +159,49 @@ public class BooksService {
             e.printStackTrace();
         }
     }
+
+    /*
+    This method will return Books object with the given book title.
+    */
+    public List<Books> findBookByTitle(String bookTitle) {
+        List<Books> booksList = new ArrayList<>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(DatabaseCredentials.JDBC_URL,
+                    DatabaseCredentials.DATABASE_USER,
+                    DatabaseCredentials.DATABASE_PASS);
+
+            if(con != null){
+                String selectQuery = "SELECT * from books where title LIKE ? ;";
+                PreparedStatement pstmt = con.prepareStatement(selectQuery);
+                pstmt.setString(1, "%"+bookTitle+"%");
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()){
+                    Books books = new Books();
+
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String author = rs.getString("author");
+                    String category = rs.getString("category");
+                    int quantity = rs.getInt("quantity");
+                    LocalDate addedDate = rs.getDate("added_date").toLocalDate();
+
+                    books.setId(id);
+                    books.setTitle(title);
+                    books.setAuthor(author);
+                    books.setCategory(category);
+                    books.setQuantity(quantity);
+                    books.setAddedDate(addedDate);
+
+                    booksList.add(books);
+                }
+            }
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return booksList;
+    }
+
 }
