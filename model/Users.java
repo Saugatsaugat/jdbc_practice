@@ -1,24 +1,24 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Users {
     private int id;
     private String name;
     private String email;
-    private Date joinedDate;
+    private LocalDate joinedDate;
 
     public Users(){
 
     }
 
-    public Users(String name, String email, Date joinedDate){
+    public Users(String name, String email, LocalDate joinedDate){
         this.name = name;
         this.email = email;
         this.joinedDate = joinedDate;
     }
 
-    public Users(int id, String name, String email, Date joinedDate){
+    public Users(int id, String name, String email, LocalDate joinedDate){
         this.id = id;
         this.name = name;
         this.email = email;
@@ -46,10 +46,10 @@ public class Users {
         this.email = email;
     }
 
-    public Date getJoinedDate(){
+    public LocalDate getJoinedDate(){
         return this.joinedDate;
     }
-    public void setJoinedDate(Date joinedDate){
+    public void setJoinedDate(LocalDate joinedDate){
         this.joinedDate = joinedDate;
     }
 

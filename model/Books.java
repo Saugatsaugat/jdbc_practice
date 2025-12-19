@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Books {
     private int id;
@@ -8,12 +8,12 @@ public class Books {
     private String author;
     private String category;
     private int quantity;
-    private Date addedDate;
+    private LocalDate addedDate;
 
     public Books() {
     }
 
-    public Books(int id, String title, String author, String category, int quantity, Date addedDate) {
+    public Books(int id, String title, String author, String category, int quantity, LocalDate addedDate) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -22,7 +22,7 @@ public class Books {
         this.addedDate = addedDate;
     }
 
-    public Books(String title, String author, String category, int quantity, Date addedDate) {
+    public Books(String title, String author, String category, int quantity, LocalDate addedDate) {
         this.title = title;
         this.author = author;
         this.category = category;
@@ -70,10 +70,10 @@ public class Books {
         this.quantity = quantity;
     }
 
-    public Date getAddedDate(){
+    public LocalDate getAddedDate(){
         return this.addedDate;
     }
-    public void setAddedDate(Date addedDate){
+    public void setAddedDate(LocalDate addedDate){
         this.addedDate = addedDate;
     }
 }

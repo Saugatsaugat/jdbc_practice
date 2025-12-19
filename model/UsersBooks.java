@@ -1,18 +1,18 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class UsersBooks {
     private int id;
     private int userId;
     private int bookId;
-    private Date issueDate;
-    private Date dueDate;
-    private Date returnDate;
+    private LocalDate issueDate;
+    private LocalDate dueDate;
+    private LocalDate returnDate;
 
     public UsersBooks(){}
 
-    public UsersBooks(int id, int userId, int bookId, Date issueDate, Date dueDate, Date returnDate){
+    public UsersBooks(int id, int userId, int bookId, LocalDate issueDate, LocalDate dueDate, LocalDate returnDate){
         this.id = id;
         this.userId = userId;
         this.bookId = bookId;
@@ -21,7 +21,7 @@ public class UsersBooks {
         this.returnDate = returnDate;
     }
 
-    public UsersBooks(int userId, int bookId, Date issueDate, Date dueDate, Date returnDate){
+    public UsersBooks(int userId, int bookId, LocalDate issueDate, LocalDate dueDate, LocalDate returnDate){
         this.userId = userId;
         this.bookId = bookId;
         this.issueDate = issueDate;
@@ -50,24 +50,24 @@ public class UsersBooks {
         this.bookId = bookId;
     }
 
-    public Date getIssueDate(){
+    public LocalDate getIssueDate(){
         return this.issueDate;
     }
-    public void setIssueDate(Date issueDate){
+    public void setIssueDate(LocalDate issueDate){
         this.issueDate = issueDate;
     }
 
-    public Date getDueDate(){
+    public LocalDate getDueDate(){
         return this.dueDate;
     }
-    public void setDueDate(Date dueDate){
+    public void setDueDate(LocalDate dueDate){
         this.dueDate = dueDate;
     }
 
-    public Date getReturnDate(){
+    public LocalDate getReturnDate(){
         return this.returnDate;
     }
-    public void setReturnDate(Date returnDate){
+    public void setReturnDate(LocalDate returnDate){
         this.returnDate = returnDate;
     }
 }
